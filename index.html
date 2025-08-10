@@ -67,8 +67,7 @@
           <ul class="nav-links">
             <li><a href="#home" class="active">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#why-us">Why Us?</a></li>
           </ul>
         </nav>
         <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
@@ -158,100 +157,155 @@
         </div>
       </section>
 
-      <!-- Services Section -->
-      <section id="services" class="section services">
+      <!-- Why Us Section -->
+      <section id="why-us" class="section why-us">
         <div class="container">
-          <h2>Our Services</h2>
-          <div class="services-grid">
-            <div class="service-card">
-              <div class="service-icon">
-                <i class="fas fa-tools"></i>
+          <h2>Why Choose Us?</h2>
+          <p class="section-subtitle">
+            See how simple it is to get professional help in just 10 minutes
+          </p>
+
+          <div class="roadmap-container">
+            <div class="roadmap-step" data-step="1">
+              <div class="step-number">1</div>
+              <div class="step-icon">
+                <i class="fas fa-mobile-alt"></i>
               </div>
-              <div class="service-content">
-                <h3>Home Repairs</h3>
+              <div class="step-content">
+                <h3>You Book</h3>
                 <p>
-                  Expert handymen for all your home repair needs. From plumbing
-                  to electrical work.
+                  Open our app, select your service, and book instantly. It
+                  takes less than 2 minutes!
                 </p>
               </div>
+              <div class="step-connector"></div>
             </div>
-            <div class="service-card">
-              <div class="service-icon">
-                <i class="fas fa-broom"></i>
+
+            <div class="roadmap-step" data-step="2">
+              <div class="step-number">2</div>
+              <div class="step-icon">
+                <i class="fas fa-headset"></i>
               </div>
-              <div class="service-content">
-                <h3>Cleaning Services</h3>
+              <div class="step-content">
+                <h3>We Receive</h3>
                 <p>
-                  Professional cleaning for homes and offices. Deep cleaning and
-                  regular maintenance.
+                  Our team instantly receives your request and starts processing
+                  it immediately.
                 </p>
               </div>
+              <div class="step-connector"></div>
             </div>
-            <div class="service-card">
-              <div class="service-icon">
-                <i class="fas fa-spa"></i>
+
+            <div class="roadmap-step" data-step="3">
+              <div class="step-number">3</div>
+              <div class="step-icon">
+                <i class="fas fa-user-check"></i>
               </div>
-              <div class="service-content">
-                <h3>Beauty & Wellness</h3>
+              <div class="step-content">
+                <h3>Pro Assigned</h3>
                 <p>
-                  Personal care services at your doorstep. Massage, beauty
-                  treatments, and more.
+                  We match you with the nearest trained professional who
+                  specializes in your service.
+                </p>
+              </div>
+              <div class="step-connector"></div>
+            </div>
+
+            <div class="roadmap-step" data-step="4">
+              <div class="step-number">4</div>
+              <div class="step-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="step-content">
+                <h3>Pro Arrives</h3>
+                <p>
+                  Your professional arrives at your location within 10 minutes,
+                  ready to help!
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- Contact Section -->
-      <section id="contact" class="section contact">
-        <div class="container">
-          <h2>Get in Touch</h2>
-          <div class="contact-content">
-            <div class="contact-info">
-              <h3>Ready to get started?</h3>
-              <p>
-                Have questions about our services? We'd love to hear from you.
-                Send us a message and we'll respond as soon as possible.
-              </p>
+          <div class="why-us-features">
+            <div class="feature-highlight">
+              <i class="fas fa-clock"></i>
+              <span>10 Minutes</span>
+              <small>Average arrival time</small>
             </div>
-            <form id="contactForm" class="contact-form" novalidate>
-              <div class="form-group">
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Your Name"
-                  required
-                />
-                <span class="error-message" id="nameError"></span>
-              </div>
-              <div class="form-group">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Your Email"
-                  required
-                />
-                <span class="error-message" id="emailError"></span>
-              </div>
-              <div class="form-group">
-                <textarea
-                  id="message"
-                  name="message"
-                  placeholder="Your Message"
-                  rows="5"
-                  required
-                ></textarea>
-                <span class="error-message" id="messageError"></span>
-              </div>
-              <button type="submit" class="submit-btn">Send Message</button>
-            </form>
+            <div class="feature-highlight">
+              <i class="fas fa-star"></i>
+              <span>4.9/5</span>
+              <small>Customer rating</small>
+            </div>
+            <div class="feature-highlight">
+              <i class="fas fa-shield-alt"></i>
+              <span>100%</span>
+              <small>Verified professionals</small>
+            </div>
           </div>
         </div>
       </section>
     </main>
+
+    <!-- Sticky Contact Button -->
+    <button
+      id="contactBtn"
+      class="sticky-contact-btn"
+      aria-label="Get in Touch"
+    >
+      <i class="fas fa-comments"></i>
+      <span>Get in Touch</span>
+    </button>
+
+    <!-- Sliding Contact Form -->
+    <div id="contactSlider" class="contact-slider">
+      <div class="contact-slider-header">
+        <h3>Get in Touch</h3>
+        <button
+          id="closeContactBtn"
+          class="close-contact-btn"
+          aria-label="Close"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="contact-slider-content">
+        <p>Have questions about our services? We'd love to hear from you!</p>
+        <form id="sliderContactForm" class="slider-contact-form" novalidate>
+          <div class="form-group">
+            <input
+              type="text"
+              id="sliderName"
+              name="name"
+              placeholder="Your Name"
+              required
+            />
+            <span class="error-message" id="sliderNameError"></span>
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="sliderEmail"
+              name="email"
+              placeholder="Your Email"
+              required
+            />
+            <span class="error-message" id="sliderEmailError"></span>
+          </div>
+          <div class="form-group">
+            <textarea
+              id="sliderMessage"
+              name="message"
+              placeholder="Your Message"
+              rows="4"
+              required
+            ></textarea>
+            <span class="error-message" id="sliderMessageError"></span>
+          </div>
+          <button type="submit" class="slider-submit-btn">Send Message</button>
+        </form>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

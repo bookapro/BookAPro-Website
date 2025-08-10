@@ -2,6 +2,11 @@
 class SectionScroller {
   constructor() {
     this.sections = document.querySelectorAll(".section");
+    this.footer = document.querySelector(".footer");
+    this.scrollableElements = [...this.sections];
+    if (this.footer) {
+      this.scrollableElements.push(this.footer);
+    }
     this.currentSection = 0;
     this.isScrolling = false;
     this.scrollTimeout = null;
@@ -93,24 +98,24 @@ class SectionScroller {
         break;
       case "End":
         e.preventDefault();
-        this.scrollToSection(this.sections.length - 1);
+        this.scrollToSection(this.scrollableElements.length - 1);
         break;
     }
   }
 
   scrollToSection(index) {
     // Clamp index to valid range
-    index = Math.max(0, Math.min(index, this.sections.length - 1));
+    index = Math.max(0, Math.min(index, this.scrollableElements.length - 1));
 
     if (index === this.currentSection) return;
 
     this.isScrolling = true;
     this.currentSection = index;
 
-    const targetSection = this.sections[index];
-    const targetPosition = targetSection.offsetTop;
+    const targetElement = this.scrollableElements[index];
+    const targetPosition = targetElement.offsetTop;
 
-    // Smooth scroll to target section
+    // Smooth scroll to target element
     window.scrollTo({
       top: targetPosition,
       behavior: "smooth",
@@ -130,12 +135,12 @@ class SectionScroller {
 
     const scrollPosition = window.pageYOffset + window.innerHeight / 2;
 
-    for (let i = 0; i < this.sections.length; i++) {
-      const section = this.sections[i];
-      const sectionTop = section.offsetTop;
-      const sectionBottom = sectionTop + section.offsetHeight;
+    for (let i = 0; i < this.scrollableElements.length; i++) {
+      const element = this.scrollableElements[i];
+      const elementTop = element.offsetTop;
+      const elementBottom = elementTop + element.offsetHeight;
 
-      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+      if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
         this.currentSection = i;
         this.updateActiveNavLink();
         break;
@@ -145,14 +150,24 @@ class SectionScroller {
 
   updateActiveNavLink() {
     const navLinks = document.querySelectorAll(".nav-links a");
-    const currentSectionId = this.sections[this.currentSection].id;
+    const currentElement = this.scrollableElements[this.currentSection];
 
-    navLinks.forEach((link) => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === `#${currentSectionId}`) {
-        link.classList.add("active");
-      }
-    });
+    // Only update nav links for sections, not footer
+    if (currentElement.classList.contains("section")) {
+      const currentSectionId = currentElement.id;
+
+      navLinks.forEach((link) => {
+        link.classList.remove("active");
+        if (link.getAttribute("href") === `#${currentSectionId}`) {
+          link.classList.add("active");
+        }
+      });
+    } else {
+      // If we're at footer, remove all active states
+      navLinks.forEach((link) => {
+        link.classList.remove("active");
+      });
+    }
   }
 }
 
@@ -363,6 +378,154 @@ class LoadingScreen {
   }
 }
 
+// Sticky Contact Button and Slider
+class ContactSlider {
+  constructor() {
+    this.contactBtn = document.getElementById("contactBtn");
+    this.contactSlider = document.getElementById("contactSlider");
+    this.closeBtn = document.getElementById("closeContactBtn");
+    this.sliderForm = document.getElementById("sliderContactForm");
+
+    this.init();
+  }
+
+  init() {
+    if (!this.contactBtn || !this.contactSlider) return;
+
+    // Open slider
+    this.contactBtn.addEventListener("click", this.openSlider.bind(this));
+
+    // Close slider
+    this.closeBtn.addEventListener("click", this.closeSlider.bind(this));
+
+    // Close on outside click
+    document.addEventListener("click", (e) => {
+      if (
+        this.contactSlider.classList.contains("active") &&
+        !this.contactSlider.contains(e.target) &&
+        !this.contactBtn.contains(e.target)
+      ) {
+        this.closeSlider();
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "Escape" &&
+        this.contactSlider.classList.contains("active")
+      ) {
+        this.closeSlider();
+      }
+    });
+
+    // Handle form submission
+    if (this.sliderForm) {
+      this.sliderForm.addEventListener("submit", this.handleSubmit.bind(this));
+
+      // Real-time validation
+      const inputs = this.sliderForm.querySelectorAll("input, textarea");
+      inputs.forEach((input) => {
+        input.addEventListener("blur", () => this.validateField(input));
+        input.addEventListener("input", () => this.clearError(input));
+      });
+    }
+  }
+
+  openSlider() {
+    this.contactSlider.classList.add("active");
+    document.body.style.overflow = "hidden"; // Prevent background scroll
+  }
+
+  closeSlider() {
+    this.contactSlider.classList.remove("active");
+    document.body.style.overflow = ""; // Restore scroll
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const isValid = this.validateForm();
+
+    if (isValid) {
+      const submitBtn = this.sliderForm.querySelector(".slider-submit-btn");
+      const originalText = submitBtn.textContent;
+
+      submitBtn.textContent = "Sending...";
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        alert("Thank you for your message! We'll get back to you soon.");
+        this.sliderForm.reset();
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        this.closeSlider();
+      }, 1500);
+    }
+  }
+
+  validateForm() {
+    const name = document.getElementById("sliderName");
+    const email = document.getElementById("sliderEmail");
+    const message = document.getElementById("sliderMessage");
+
+    let isValid = true;
+
+    isValid = this.validateField(name) && isValid;
+    isValid = this.validateField(email) && isValid;
+    isValid = this.validateField(message) && isValid;
+
+    return isValid;
+  }
+
+  validateField(field) {
+    const value = field.value.trim();
+    const fieldName = field.name;
+    const errorElement = document.getElementById(
+      `slider${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}Error`
+    );
+
+    let isValid = true;
+    let errorMessage = "";
+
+    if (!value) {
+      isValid = false;
+      errorMessage = `${
+        fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+      } is required`;
+    } else if (fieldName === "email" && !this.isValidEmail(value)) {
+      isValid = false;
+      errorMessage = "Please enter a valid email address";
+    } else if (fieldName === "message" && value.length < 10) {
+      isValid = false;
+      errorMessage = "Message must be at least 10 characters long";
+    }
+
+    if (errorElement) {
+      errorElement.textContent = errorMessage;
+    }
+
+    field.classList.toggle("error", !isValid);
+
+    return isValid;
+  }
+
+  clearError(field) {
+    const errorElement = document.getElementById(
+      `slider${field.name.charAt(0).toUpperCase() + field.name.slice(1)}Error`
+    );
+    if (errorElement) {
+      errorElement.textContent = "";
+    }
+    field.classList.remove("error");
+  }
+
+  isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize loading screen first
@@ -374,6 +537,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileMenu = new MobileMenu();
     const smoothNavigation = new SmoothNavigation(sectionScroller);
     const contactForm = new ContactForm();
+    const contactSlider = new ContactSlider();
 
     // Image lazy loading
     const images = document.querySelectorAll('img[loading="lazy"]');
