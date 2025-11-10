@@ -246,6 +246,53 @@ class LoadingScreen {
   }
 }
 
+// Letter Popup Handler
+class LetterPopup {
+  constructor() {
+    this.letterBtn = document.getElementById("letterBtn");
+    this.letterPopup = document.getElementById("letterPopup");
+    this.closeBtn = document.getElementById("closeLetter");
+
+    this.init();
+  }
+
+  init() {
+    if (!this.letterBtn || !this.letterPopup) return;
+
+    // Open letter
+    this.letterBtn.addEventListener("click", this.openLetter.bind(this));
+
+    // Close letter
+    this.closeBtn.addEventListener("click", this.closeLetter.bind(this));
+
+    // Close on outside click
+    this.letterPopup.addEventListener("click", (e) => {
+      if (e.target === this.letterPopup) {
+        this.closeLetter();
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.letterPopup.classList.contains("active")) {
+        this.closeLetter();
+      }
+    });
+  }
+
+  openLetter() {
+    this.letterPopup.classList.add("active");
+    document.body.classList.add("modal-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  closeLetter() {
+    this.letterPopup.classList.remove("active");
+    document.body.classList.remove("modal-open");
+    document.body.style.overflow = "";
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize loading screen first
@@ -257,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileMenu = new MobileMenu();
     const smoothNavigation = new SmoothNavigation();
     const contactForm = new ContactForm();
+    const letterPopup = new LetterPopup();
 
     // Image lazy loading
     const images = document.querySelectorAll('img[loading="lazy"]');

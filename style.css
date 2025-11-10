@@ -200,7 +200,8 @@
 /* Hide main content initially */
 body.loading .navbar,
 body.loading main,
-body.loading .footer {
+body.loading .footer,
+body.loading .letter-note-btn {
   opacity: 0;
   visibility: hidden;
 }
@@ -208,7 +209,8 @@ body.loading .footer {
 /* Show main content after loading */
 body.loaded .navbar,
 body.loaded main,
-body.loaded .footer {
+body.loaded .footer,
+body.loaded .letter-note-btn {
   opacity: 1;
   visibility: visible;
   animation: fadeInUp 0.8s ease forwards;
@@ -816,6 +818,208 @@ body {
   box-shadow: 0 8px 20px rgba(106, 46, 149, 0.3);
 }
 
+/* Letter Note Icon */
+.letter-note-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #b8860b 0%, #daa520 50%, #cd853f 100%);
+  color: #2f1b14;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.4);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  animation: letterFloat 3s ease-in-out infinite;
+}
+
+/* Hide letter note icon when modal is open */
+.letter-popup.active + .letter-note-btn,
+body.modal-open .letter-note-btn {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none;
+}
+
+.letter-note-btn:hover {
+  transform: translateX(-50%) translateY(-5px);
+  box-shadow: 0 12px 35px rgba(184, 134, 11, 0.6);
+}
+
+@keyframes letterFloat {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0px);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+/* Letter Popup */
+.letter-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.letter-popup.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.letter-container {
+  background: #f9f9f9;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transform: translateY(100px);
+  transition: transform 0.4s ease;
+  position: relative;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.letter-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.letter-popup.active .letter-container {
+  transform: translateY(0);
+}
+
+.letter-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 20px 0;
+}
+
+.close-letter-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-letter-btn:hover {
+  background: rgba(106, 46, 149, 0.1);
+  color: #6a2e95;
+}
+
+.letter-content {
+  padding: 0 40px 40px;
+  font-family: "Georgia", serif;
+  line-height: 1.8;
+  color: #333;
+}
+
+.letter-title {
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.letter-title h3 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.8rem;
+  color: #6a2e95;
+  margin: 0;
+}
+
+.letter-title i {
+  color: #e74c3c;
+  font-size: 1.2rem;
+  animation: heartBeat 2s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.letter-greeting {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #6a2e95;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.letter-poem {
+  margin: 30px 0;
+  padding: 20px;
+  background: rgba(106, 46, 149, 0.05);
+  border-radius: 15px;
+  border-left: 4px solid #6a2e95;
+}
+
+.letter-poem p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  text-align: center;
+  font-style: italic;
+  color: #555;
+}
+
+.letter-closing {
+  margin: 30px 0;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6a2e95;
+}
+
+.letter-signature {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(106, 46, 149, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-style: italic;
+  color: #666;
+}
+
+.text-purple {
+  color: #6a2e95;
+}
+
 /* Footer */
 .footer {
   position: relative;
@@ -1313,34 +1517,40 @@ body {
     line-height: 1.2;
   }
 
-  /* Sticky Contact Button Mobile */
-  .sticky-contact-btn {
+  /* Letter Popup Mobile */
+  .letter-note-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
     bottom: 20px;
+    left: auto;
     right: 20px;
-    padding: 12px 20px;
-    font-size: 14px;
+    transform: none;
   }
 
-  .sticky-contact-btn span {
-    display: none;
+  .letter-container {
+    width: 95%;
+    max-height: 85vh;
   }
 
-  .sticky-contact-btn {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    justify-content: center;
+  .letter-content {
+    padding: 0 25px 25px;
   }
 
-  /* Contact Slider Mobile */
-  .contact-slider {
-    width: 100vw;
-    right: -100vw;
+  .letter-title h3 {
+    font-size: 1.4rem;
   }
 
-  .contact-slider-content {
-    padding: 20px 15px;
+  .letter-greeting {
+    font-size: 1.1rem;
+  }
+
+  .letter-poem p {
+    font-size: 1rem;
+  }
+
+  .letter-closing {
+    font-size: 1rem;
   }
 
   /* Footer for very small screens */
