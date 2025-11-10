@@ -237,7 +237,7 @@ body.loaded .footer {
 }
 
 html {
-  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
   overflow-y: scroll;
   height: 100%;
 }
@@ -341,7 +341,6 @@ body {
 /* Section Base */
 .section {
   min-height: 100vh;
-  scroll-snap-align: start;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,25 +378,35 @@ body {
   margin-right: auto;
 }
 
-.cta-buttons {
+.coming-soon {
   display: flex;
-  gap: 1.5rem;
   justify-content: center;
-  flex-wrap: wrap;
+  margin-top: 2rem;
 }
 
-.app-store-btn {
-  transition: transform 0.3s ease;
+.coming-soon-text {
+  font-family: "Orbitron", sans-serif;
+  font-size: clamp(0.5rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: #6a2e95;
+  text-align: center;
+  padding: 1rem 2rem;
+  background: rgba(106, 46, 149, 0.1);
+  border-radius: 50px;
+  border: 2px solid #6a2e95;
+  animation: comingSoonPulse 2s ease-in-out infinite;
 }
 
-.app-store-btn:hover {
-  transform: translateY(-5px);
-}
-
-.cta-buttons img {
-  height: clamp(3rem, 8vw, 4rem);
-  width: auto;
-  object-fit: contain;
+@keyframes comingSoonPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(106, 46, 149, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(106, 46, 149, 0);
+  }
 }
 
 /* About Section */
@@ -585,49 +594,6 @@ body {
 
 .roadmap-step:last-child .step-connector {
   display: none;
-}
-
-/* Why Us Features */
-.why-us-features {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-}
-
-.feature-highlight {
-  text-align: center;
-  padding: 2rem;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  min-width: 150px;
-  transition: transform 0.3s ease;
-}
-
-.feature-highlight:hover {
-  transform: translateY(-5px);
-}
-
-.feature-highlight i {
-  font-size: 2.5rem;
-  color: #6a2e95;
-  margin-bottom: 1rem;
-}
-
-.feature-highlight span {
-  display: block;
-  font-family: "Orbitron", sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #6a2e95;
-  margin-bottom: 0.5rem;
-}
-
-.feature-highlight small {
-  color: #666;
-  font-size: 0.9rem;
 }
 
 /* Contact Section */
@@ -890,8 +856,9 @@ body {
 
 .footer-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .footer-logo {
@@ -1265,10 +1232,9 @@ body {
     height: 2px;
   }
 
-  .cta-buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+  .coming-soon-text {
+    font-size: clamp(0.8rem, 4vw, 2rem);
+    padding: 0.8rem 1.5rem;
   }
 
   .container {
@@ -1345,30 +1311,6 @@ body {
   .step-content p {
     font-size: 0.75rem;
     line-height: 1.2;
-  }
-
-  .why-us-features {
-    gap: 0.6rem;
-    margin-top: 1.2rem;
-  }
-
-  .feature-highlight {
-    padding: 0.8rem 0.6rem;
-    min-width: 80px;
-  }
-
-  .feature-highlight i {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .feature-highlight span {
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
-  }
-
-  .feature-highlight small {
-    font-size: 0.7rem;
   }
 
   /* Sticky Contact Button Mobile */
@@ -1470,14 +1412,10 @@ body {
   }
 }
 
-/* Snap scroll for reduced motion users */
+/* Smooth scroll for reduced motion users */
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-snap-type: none;
-  }
-
-  .section {
-    scroll-snap-align: none;
+    scroll-behavior: auto;
   }
 }
 

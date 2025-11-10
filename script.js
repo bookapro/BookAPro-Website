@@ -1,173 +1,45 @@
-// Forced Section Scrolling
-class SectionScroller {
+// Simple Navigation Handler
+class NavigationHandler {
   constructor() {
     this.sections = document.querySelectorAll(".section");
-    this.footer = document.querySelector(".footer");
-    this.scrollableElements = [...this.sections];
-    if (this.footer) {
-      this.scrollableElements.push(this.footer);
-    }
-    this.currentSection = 0;
-    this.isScrolling = false;
-    this.scrollTimeout = null;
-
     this.init();
   }
 
   init() {
-    // Disable default scroll snap temporarily
-    document.documentElement.style.scrollSnapType = "none";
+    // Update active nav link on scroll
+    window.addEventListener("scroll", this.updateActiveNavLink.bind(this));
 
-    // Add wheel event listener for desktop
-    window.addEventListener("wheel", this.handleWheel.bind(this), {
-      passive: false,
-    });
-
-    // Add touch events for mobile
-    this.addTouchEvents();
-
-    // Add keyboard navigation
-    window.addEventListener("keydown", this.handleKeydown.bind(this));
-
-    // Update current section on manual scroll (for nav clicks)
-    window.addEventListener("scroll", this.updateCurrentSection.bind(this));
-
-    // Set initial section
-    this.updateCurrentSection();
-  }
-
-  handleWheel(e) {
-    e.preventDefault();
-
-    if (this.isScrolling) return;
-
-    const direction = e.deltaY > 0 ? 1 : -1;
-    this.scrollToSection(this.currentSection + direction);
-  }
-
-  addTouchEvents() {
-    let startY = 0;
-    let startTime = 0;
-
-    window.addEventListener(
-      "touchstart",
-      (e) => {
-        startY = e.touches[0].clientY;
-        startTime = Date.now();
-      },
-      { passive: true }
-    );
-
-    window.addEventListener(
-      "touchend",
-      (e) => {
-        if (this.isScrolling) return;
-
-        const endY = e.changedTouches[0].clientY;
-        const endTime = Date.now();
-        const deltaY = startY - endY;
-        const deltaTime = endTime - startTime;
-
-        // Minimum swipe distance and maximum time for swipe detection
-        if (Math.abs(deltaY) > 50 && deltaTime < 500) {
-          const direction = deltaY > 0 ? 1 : -1;
-          this.scrollToSection(this.currentSection + direction);
-        }
-      },
-      { passive: true }
-    );
-  }
-
-  handleKeydown(e) {
-    if (this.isScrolling) return;
-
-    switch (e.key) {
-      case "ArrowDown":
-      case "PageDown":
-        e.preventDefault();
-        this.scrollToSection(this.currentSection + 1);
-        break;
-      case "ArrowUp":
-      case "PageUp":
-        e.preventDefault();
-        this.scrollToSection(this.currentSection - 1);
-        break;
-      case "Home":
-        e.preventDefault();
-        this.scrollToSection(0);
-        break;
-      case "End":
-        e.preventDefault();
-        this.scrollToSection(this.scrollableElements.length - 1);
-        break;
-    }
-  }
-
-  scrollToSection(index) {
-    // Clamp index to valid range
-    index = Math.max(0, Math.min(index, this.scrollableElements.length - 1));
-
-    if (index === this.currentSection) return;
-
-    this.isScrolling = true;
-    this.currentSection = index;
-
-    const targetElement = this.scrollableElements[index];
-    const targetPosition = targetElement.offsetTop;
-
-    // Smooth scroll to target element
-    window.scrollTo({
-      top: targetPosition,
-      behavior: "smooth",
-    });
-
-    // Update active nav link
+    // Set initial active link
     this.updateActiveNavLink();
-
-    // Reset scrolling flag after animation
-    setTimeout(() => {
-      this.isScrolling = false;
-    }, 800); // Slightly longer than CSS transition
-  }
-
-  updateCurrentSection() {
-    if (this.isScrolling) return;
-
-    const scrollPosition = window.pageYOffset + window.innerHeight / 2;
-
-    for (let i = 0; i < this.scrollableElements.length; i++) {
-      const element = this.scrollableElements[i];
-      const elementTop = element.offsetTop;
-      const elementBottom = elementTop + element.offsetHeight;
-
-      if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
-        this.currentSection = i;
-        this.updateActiveNavLink();
-        break;
-      }
-    }
   }
 
   updateActiveNavLink() {
+    const scrollPosition = window.pageYOffset + window.innerHeight / 2;
     const navLinks = document.querySelectorAll(".nav-links a");
-    const currentElement = this.scrollableElements[this.currentSection];
 
-    // Only update nav links for sections, not footer
-    if (currentElement.classList.contains("section")) {
-      const currentSectionId = currentElement.id;
+    // Find current section
+    let currentSection = null;
+    for (let i = 0; i < this.sections.length; i++) {
+      const section = this.sections[i];
+      const sectionTop = section.offsetTop;
+      const sectionBottom = sectionTop + section.offsetHeight;
 
-      navLinks.forEach((link) => {
-        link.classList.remove("active");
-        if (link.getAttribute("href") === `#${currentSectionId}`) {
-          link.classList.add("active");
-        }
-      });
-    } else {
-      // If we're at footer, remove all active states
-      navLinks.forEach((link) => {
-        link.classList.remove("active");
-      });
+      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+        currentSection = section.id;
+        break;
+      }
     }
+
+    // Update nav links
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      if (
+        currentSection &&
+        link.getAttribute("href") === `#${currentSection}`
+      ) {
+        link.classList.add("active");
+      }
+    });
   }
 }
 
@@ -212,10 +84,8 @@ class MobileMenu {
 
 // Smooth Navigation for Nav Links
 class SmoothNavigation {
-  constructor(sectionScroller) {
-    this.sectionScroller = sectionScroller;
+  constructor() {
     this.navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-
     this.init();
   }
 
@@ -232,12 +102,10 @@ class SmoothNavigation {
     const targetSection = document.getElementById(targetId);
 
     if (targetSection) {
-      const sectionIndex = Array.from(this.sectionScroller.sections).indexOf(
-        targetSection
-      );
-      if (sectionIndex !== -1) {
-        this.sectionScroller.scrollToSection(sectionIndex);
-      }
+      targetSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }
 }
@@ -378,154 +246,6 @@ class LoadingScreen {
   }
 }
 
-// Sticky Contact Button and Slider
-class ContactSlider {
-  constructor() {
-    this.contactBtn = document.getElementById("contactBtn");
-    this.contactSlider = document.getElementById("contactSlider");
-    this.closeBtn = document.getElementById("closeContactBtn");
-    this.sliderForm = document.getElementById("sliderContactForm");
-
-    this.init();
-  }
-
-  init() {
-    if (!this.contactBtn || !this.contactSlider) return;
-
-    // Open slider
-    this.contactBtn.addEventListener("click", this.openSlider.bind(this));
-
-    // Close slider
-    this.closeBtn.addEventListener("click", this.closeSlider.bind(this));
-
-    // Close on outside click
-    document.addEventListener("click", (e) => {
-      if (
-        this.contactSlider.classList.contains("active") &&
-        !this.contactSlider.contains(e.target) &&
-        !this.contactBtn.contains(e.target)
-      ) {
-        this.closeSlider();
-      }
-    });
-
-    // Close on escape key
-    document.addEventListener("keydown", (e) => {
-      if (
-        e.key === "Escape" &&
-        this.contactSlider.classList.contains("active")
-      ) {
-        this.closeSlider();
-      }
-    });
-
-    // Handle form submission
-    if (this.sliderForm) {
-      this.sliderForm.addEventListener("submit", this.handleSubmit.bind(this));
-
-      // Real-time validation
-      const inputs = this.sliderForm.querySelectorAll("input, textarea");
-      inputs.forEach((input) => {
-        input.addEventListener("blur", () => this.validateField(input));
-        input.addEventListener("input", () => this.clearError(input));
-      });
-    }
-  }
-
-  openSlider() {
-    this.contactSlider.classList.add("active");
-    document.body.style.overflow = "hidden"; // Prevent background scroll
-  }
-
-  closeSlider() {
-    this.contactSlider.classList.remove("active");
-    document.body.style.overflow = ""; // Restore scroll
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-
-    const isValid = this.validateForm();
-
-    if (isValid) {
-      const submitBtn = this.sliderForm.querySelector(".slider-submit-btn");
-      const originalText = submitBtn.textContent;
-
-      submitBtn.textContent = "Sending...";
-      submitBtn.disabled = true;
-
-      setTimeout(() => {
-        alert("Thank you for your message! We'll get back to you soon.");
-        this.sliderForm.reset();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        this.closeSlider();
-      }, 1500);
-    }
-  }
-
-  validateForm() {
-    const name = document.getElementById("sliderName");
-    const email = document.getElementById("sliderEmail");
-    const message = document.getElementById("sliderMessage");
-
-    let isValid = true;
-
-    isValid = this.validateField(name) && isValid;
-    isValid = this.validateField(email) && isValid;
-    isValid = this.validateField(message) && isValid;
-
-    return isValid;
-  }
-
-  validateField(field) {
-    const value = field.value.trim();
-    const fieldName = field.name;
-    const errorElement = document.getElementById(
-      `slider${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}Error`
-    );
-
-    let isValid = true;
-    let errorMessage = "";
-
-    if (!value) {
-      isValid = false;
-      errorMessage = `${
-        fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
-      } is required`;
-    } else if (fieldName === "email" && !this.isValidEmail(value)) {
-      isValid = false;
-      errorMessage = "Please enter a valid email address";
-    } else if (fieldName === "message" && value.length < 10) {
-      isValid = false;
-      errorMessage = "Message must be at least 10 characters long";
-    }
-
-    if (errorElement) {
-      errorElement.textContent = errorMessage;
-    }
-
-    field.classList.toggle("error", !isValid);
-
-    return isValid;
-  }
-
-  clearError(field) {
-    const errorElement = document.getElementById(
-      `slider${field.name.charAt(0).toUpperCase() + field.name.slice(1)}Error`
-    );
-    if (errorElement) {
-      errorElement.textContent = "";
-    }
-    field.classList.remove("error");
-  }
-
-  isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-}
-
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize loading screen first
@@ -533,11 +253,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize other components after a short delay
   setTimeout(() => {
-    const sectionScroller = new SectionScroller();
+    const navigationHandler = new NavigationHandler();
     const mobileMenu = new MobileMenu();
-    const smoothNavigation = new SmoothNavigation(sectionScroller);
+    const smoothNavigation = new SmoothNavigation();
     const contactForm = new ContactForm();
-    const contactSlider = new ContactSlider();
 
     // Image lazy loading
     const images = document.querySelectorAll('img[loading="lazy"]');
