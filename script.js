@@ -396,6 +396,38 @@ class ServicesCarousel {
   }
 }
 
+// Scroll Animation Handler
+class ScrollAnimations {
+  constructor() {
+    this.animatedElements = document.querySelectorAll(
+      ".scroll-animate, .scroll-animate-stagger"
+    );
+    this.init();
+  }
+
+  init() {
+    // Create intersection observer
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-in");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    // Observe all elements
+    this.animatedElements.forEach((element) => {
+      this.observer.observe(element);
+    });
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize loading screen first
@@ -409,6 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const contactForm = new ContactForm();
     const letterPopup = new LetterPopup();
     const servicesCarousel = new ServicesCarousel();
+    const scrollAnimations = new ScrollAnimations();
 
     // Image lazy loading
     const images = document.querySelectorAll('img[loading="lazy"]');
