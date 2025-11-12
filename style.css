@@ -574,7 +574,7 @@ body {
 .service-card {
   position: absolute;
   width: 300px;
-  height: 350px;
+  height: 375px;
   background: white;
   border-radius: 20px;
   overflow: hidden;
@@ -1639,7 +1639,7 @@ body.modal-open .letter-note-btn {
 
   .service-card {
     width: 250px;
-    height: 300px;
+    height: 350px;
   }
 
   .service-card.prev {
@@ -1886,7 +1886,7 @@ body.modal-open .letter-note-btn {
 
   .service-card {
     width: 200px;
-    height: 250px;
+    height: 315px;
   }
 
   .service-card.prev {
