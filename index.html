@@ -68,6 +68,7 @@
             <li><a href="#home" class="active">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#why-us">Why Us?</a></li>
+            <li><a href="#coming-soon">Coming Soon</a></li>
           </ul>
         </nav>
         <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
@@ -80,17 +81,120 @@
 
     <!-- Sections Wrapper -->
     <main>
-      <!-- Home Section -->
-      <section id="home" class="section home">
-        <div class="hero-content">
-          <h1>Quick Services in Minutes</h1>
-          <p class="hero-subtitle">
-            Fast, reliable professional services available anytime, anywhere.
-            Our mobile app, built with React Native, connects you with skilled
-            experts instantly.
+      <!-- Services Section (Now Home) -->
+      <section id="home" class="section services">
+        <div class="container">
+          <h2>Professional Services at Your Doorstep</h2>
+          <p class="section-subtitle">
+            Book verified professionals for all your needs - from cooking to
+            cleaning, driving to home maintenance.
           </p>
-          <div class="coming-soon">
-            <p class="coming-soon-text">Coming Soon...</p>
+
+          <div class="services-carousel">
+            <button class="carousel-arrow carousel-arrow-left" id="prevService">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="services-container">
+              <div class="services-track" id="servicesTrack">
+                <div class="service-card" data-service="chef">
+                  <div class="service-image">
+                    <img src="images/chef.jpg" alt="Professional Chef" />
+                  </div>
+                  <div class="service-content">
+                    <h3>Chef Services</h3>
+                    <p>
+                      Professional chefs for your special occasions and daily
+                      meals
+                    </p>
+                  </div>
+                </div>
+
+                <div class="service-card" data-service="maid">
+                  <div class="service-image">
+                    <img src="images/maid.jpg" alt="House Maid" />
+                  </div>
+                  <div class="service-content">
+                    <h3>Maid Services</h3>
+                    <p>Reliable house cleaning and maintenance services</p>
+                  </div>
+                </div>
+
+                <div class="service-card" data-service="kitchen-help">
+                  <div class="service-image">
+                    <img src="images/kitchenHelp.jpg" alt="Kitchen Helper" />
+                  </div>
+                  <div class="service-content">
+                    <h3>Kitchen Help</h3>
+                    <p>
+                      Assistance with cooking, food prep, and kitchen
+                      organization
+                    </p>
+                  </div>
+                </div>
+
+                <div class="service-card" data-service="house-cleaning">
+                  <div class="service-image">
+                    <img src="images/houseCleaning.jpg" alt="House Cleaning" />
+                  </div>
+                  <div class="service-content">
+                    <h3>House Cleaning</h3>
+                    <p>Deep cleaning and regular maintenance for your home</p>
+                  </div>
+                </div>
+
+                <div class="service-card" data-service="driver">
+                  <div class="service-image">
+                    <img
+                      src="images/driver2Wheeler.png"
+                      alt="Professional Driver"
+                    />
+                  </div>
+                  <div class="service-content">
+                    <h3>Driver Services</h3>
+                    <p>Professional drivers for your transportation needs</p>
+                  </div>
+                </div>
+
+                <div class="service-card" data-service="driver-2wheeler">
+                  <div class="service-image">
+                    <img
+                      src="images/driver2Wheeler.png"
+                      alt="Two Wheeler Driver"
+                    />
+                  </div>
+                  <div class="service-content">
+                    <h3>Two Wheeler Driver</h3>
+                    <p>
+                      Quick and efficient two-wheeler transportation services
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  class="service-card more-services-card-carousel"
+                  data-service="more-services"
+                >
+                  <div class="more-services-content">
+                    <div class="more-icon">
+                      <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Many More to Come</h3>
+                    <p>
+                      We're constantly expanding our services to meet all your
+                      needs
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="carousel-arrow carousel-arrow-right"
+              id="nextService"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
       </section>
@@ -202,6 +306,23 @@
                   help!
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coming Soon Section -->
+      <section id="coming-soon" class="section coming-soon-section">
+        <div class="container">
+          <div class="coming-soon-content">
+            <h2>Quick Services in Minutes</h2>
+            <p class="coming-soon-subtitle">
+              Fast, reliable professional services available anytime, anywhere.
+              Our mobile app, built with React Native, connects you with skilled
+              experts instantly.
+            </p>
+            <div class="coming-soon">
+              <p class="coming-soon-text">Coming Soon...</p>
             </div>
           </div>
         </div>

@@ -293,6 +293,109 @@ class LetterPopup {
   }
 }
 
+// Simple Rotational Carousel Handler
+class ServicesCarousel {
+  constructor() {
+    this.container = document.querySelector(".services-container");
+    this.track = document.getElementById("servicesTrack");
+    this.prevBtn = document.getElementById("prevService");
+    this.nextBtn = document.getElementById("nextService");
+
+    this.serviceCards = document.querySelectorAll(".service-card");
+
+    this.currentSlide = 0;
+    this.totalSlides = this.serviceCards.length;
+    this.autoRotateInterval = null;
+
+    this.init();
+  }
+
+  init() {
+    if (!this.track || this.totalSlides === 0) return;
+
+    this.setupEventListeners();
+    this.updateCarousel();
+    this.startAutoRotate();
+  }
+
+  setupEventListeners() {
+    this.prevBtn.addEventListener("click", () => {
+      this.prevSlide();
+      this.resetAutoRotate();
+    });
+
+    this.nextBtn.addEventListener("click", () => {
+      this.nextSlide();
+      this.resetAutoRotate();
+    });
+
+    // Pause auto-rotate on hover
+    this.container.addEventListener("mouseenter", () => {
+      this.pauseAutoRotate();
+    });
+
+    this.container.addEventListener("mouseleave", () => {
+      this.startAutoRotate();
+    });
+  }
+
+  prevSlide() {
+    this.currentSlide =
+      this.currentSlide === 0 ? this.totalSlides - 1 : this.currentSlide - 1;
+    this.updateCarousel();
+  }
+
+  nextSlide() {
+    this.currentSlide =
+      this.currentSlide === this.totalSlides - 1 ? 0 : this.currentSlide + 1;
+    this.updateCarousel();
+  }
+
+  goToSlide(index) {
+    this.currentSlide = index;
+    this.updateCarousel();
+  }
+
+  updateCarousel() {
+    // Calculate previous and next indices
+    const prevIndex =
+      this.currentSlide === 0 ? this.totalSlides - 1 : this.currentSlide - 1;
+    const nextIndex =
+      this.currentSlide === this.totalSlides - 1 ? 0 : this.currentSlide + 1;
+
+    // Update card positions and states
+    this.serviceCards.forEach((card, index) => {
+      // Remove all classes first
+      card.classList.remove("active", "prev", "next");
+
+      if (index === this.currentSlide) {
+        card.classList.add("active");
+      } else if (index === prevIndex) {
+        card.classList.add("prev");
+      } else if (index === nextIndex) {
+        card.classList.add("next");
+      }
+    });
+  }
+
+  startAutoRotate() {
+    this.autoRotateInterval = setInterval(() => {
+      this.nextSlide();
+    }, 4000); // Auto-rotate every 4 seconds
+  }
+
+  pauseAutoRotate() {
+    if (this.autoRotateInterval) {
+      clearInterval(this.autoRotateInterval);
+    }
+  }
+
+  resetAutoRotate() {
+    this.pauseAutoRotate();
+    this.startAutoRotate();
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize loading screen first
@@ -305,6 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const smoothNavigation = new SmoothNavigation();
     const contactForm = new ContactForm();
     const letterPopup = new LetterPopup();
+    const servicesCarousel = new ServicesCarousel();
 
     // Image lazy loading
     const images = document.querySelectorAll('img[loading="lazy"]');
