@@ -2022,6 +2022,13 @@ body.modal-open .letter-note-btn {
     transform: none;
   }
 
+  /* Christmas Hat Mobile */
+  .christmas-hat {
+    font-size: 1.2rem;
+    top: -6px;
+    right: -3px;
+  }
+
   .letter-container {
     width: 95%;
     max-height: 85vh;
@@ -2206,6 +2213,40 @@ body[data-festival="newyear"] .festival-particle {
 /* Hide particles when festival is "none" */
 body[data-festival="none"] .festival-particles,
 body:not([data-festival]) .festival-particles {
+  display: none;
+}
+
+/* Christmas Hat on Logo */
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.christmas-hat {
+  position: absolute;
+  top: -8px;
+  right: -5px;
+  font-size: 1.5rem;
+  transform: rotate(25deg);
+  animation: hatWiggle 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes hatWiggle {
+  0%,
+  100% {
+    transform: rotate(25deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+/* Hide Christmas hat when not Christmas theme */
+body[data-festival="none"] .christmas-hat,
+body[data-festival="diwali"] .christmas-hat,
+body[data-festival="newyear"] .christmas-hat,
+body:not([data-festival]) .christmas-hat {
   display: none;
 }
 
