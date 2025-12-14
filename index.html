@@ -36,7 +36,21 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <body data-festival="christmas">
+    <!-- 
+      Festival Theme System:
+      Change data-festival attribute to switch themes:
+      - "christmas" = Snowflakes only (purple theme color)
+      - "diwali" = Diyas and sparkles floating up
+      - "newyear" = Firework bursts and celebration emojis
+      - "none" = No festival effects
+      
+      You can also change theme dynamically in console:
+      window.festivalTheme.changeTheme('diwali')
+    -->
+    <!-- Festival Particles Container -->
+    <div id="festivalParticles" class="festival-particles"></div>
+
     <!-- Loading Screen -->
     <div id="loadingScreen" class="loading-screen">
       <div class="loading-container">

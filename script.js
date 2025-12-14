@@ -428,6 +428,230 @@ class ScrollAnimations {
   }
 }
 
+// Festival Theme System
+class FestivalTheme {
+  constructor() {
+    this.container = document.getElementById("festivalParticles");
+    this.theme = document.body.getAttribute("data-festival") || "none";
+    this.particles = [];
+    this.maxParticles = 25;
+    this.init();
+  }
+
+  init() {
+    if (this.theme === "none" || !this.container) return;
+
+    // Start generating particles based on theme
+    switch (this.theme) {
+      case "christmas":
+        this.startChristmasTheme();
+        break;
+      case "diwali":
+        this.startDiwaliTheme();
+        break;
+      case "newyear":
+        this.startNewYearTheme();
+        break;
+    }
+  }
+
+  startChristmasTheme() {
+    // Create snowflakes only
+    const christmasSymbols = ["❄", "❅", "❆"];
+
+    // Initial batch - reduced for slower effect
+    for (let i = 0; i < 15; i++) {
+      setTimeout(() => {
+        this.createChristmasParticle(christmasSymbols);
+      }, i * 400);
+    }
+
+    // Continuous generation - slower interval
+    setInterval(() => {
+      if (this.particles.length < this.maxParticles) {
+        this.createChristmasParticle(christmasSymbols);
+      }
+    }, 2000);
+  }
+
+  createChristmasParticle(christmasSymbols) {
+    const particle = document.createElement("div");
+    particle.className = "festival-particle";
+    particle.textContent =
+      christmasSymbols[Math.floor(Math.random() * christmasSymbols.length)];
+
+    // Random position
+    particle.style.left = Math.random() * 100 + "%";
+
+    // Random size
+    const size = 18 + Math.random() * 14;
+    particle.style.fontSize = size + "px";
+
+    // Random animation duration (slower = more elegant)
+    const duration = 10 + Math.random() * 15;
+    particle.style.animationDuration = duration + "s";
+
+    // Random delay
+    particle.style.animationDelay = Math.random() * 2 + "s";
+
+    this.container.appendChild(particle);
+    this.particles.push(particle);
+
+    // Remove after animation
+    setTimeout(() => {
+      if (particle.parentNode) {
+        particle.parentNode.removeChild(particle);
+        this.particles = this.particles.filter((p) => p !== particle);
+      }
+    }, (duration + 2) * 1000);
+  }
+
+  startDiwaliTheme() {
+    // Create diyas and sparkles
+    const diwaliSymbols = ["🪔", "✨", "🎆", "💫", "⭐"];
+
+    // Initial batch
+    for (let i = 0; i < 25; i++) {
+      setTimeout(() => {
+        this.createDiwaliParticle(diwaliSymbols);
+      }, i * 250);
+    }
+
+    // Continuous generation
+    setInterval(() => {
+      if (this.particles.length < this.maxParticles) {
+        this.createDiwaliParticle(diwaliSymbols);
+      }
+    }, 1000);
+  }
+
+  createDiwaliParticle(symbols) {
+    const particle = document.createElement("div");
+    particle.className = "festival-particle";
+    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+    // Random position
+    particle.style.left = Math.random() * 100 + "%";
+
+    // Random size
+    const size = 18 + Math.random() * 12;
+    particle.style.fontSize = size + "px";
+
+    // Random animation duration
+    const duration = 8 + Math.random() * 10;
+    particle.style.animationDuration = duration + "s";
+
+    // Random delay
+    particle.style.animationDelay = Math.random() * 2 + "s";
+
+    this.container.appendChild(particle);
+    this.particles.push(particle);
+
+    // Remove after animation
+    setTimeout(() => {
+      if (particle.parentNode) {
+        particle.parentNode.removeChild(particle);
+        this.particles = this.particles.filter((p) => p !== particle);
+      }
+    }, (duration + 2) * 1000);
+  }
+
+  startNewYearTheme() {
+    // Create firework bursts and celebration symbols
+    const fireworkSymbols = [
+      "🎆",
+      "🎇",
+      "✨",
+      "�",
+      "⭐,",
+      "🌟",
+      "🎉",
+      "🎊",
+      "🥳",
+      "🍾",
+    ];
+
+    // Create bursts every 2 seconds
+    setInterval(() => {
+      this.createFireworkBurst(fireworkSymbols);
+    }, 2000);
+
+    // Initial burst
+    this.createFireworkBurst(fireworkSymbols);
+  }
+
+  createFireworkBurst(symbols) {
+    // Random position for burst origin
+    const originX = 20 + Math.random() * 60; // 20-80% of screen width
+    const originY = 20 + Math.random() * 40; // 20-60% of screen height
+
+    // Create multiple particles in a burst
+    const particleCount = 8 + Math.floor(Math.random() * 8);
+
+    for (let i = 0; i < particleCount; i++) {
+      setTimeout(() => {
+        this.createFireworkParticle(symbols, originX, originY);
+      }, i * 50);
+    }
+  }
+
+  createFireworkParticle(symbols, originX, originY) {
+    const particle = document.createElement("div");
+    particle.className = "festival-particle";
+    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+    // Set origin position
+    particle.style.left = originX + "%";
+    particle.style.top = originY + "%";
+
+    // Random size
+    const size = 16 + Math.random() * 12;
+    particle.style.fontSize = size + "px";
+
+    // Random burst direction
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 100 + Math.random() * 150;
+    const tx = Math.cos(angle) * distance;
+    const ty = Math.sin(angle) * distance;
+
+    particle.style.setProperty("--tx", tx + "px");
+    particle.style.setProperty("--ty", ty + "px");
+
+    // Random animation duration
+    const duration = 1 + Math.random() * 1.5;
+    particle.style.animationDuration = duration + "s";
+
+    this.container.appendChild(particle);
+    this.particles.push(particle);
+
+    // Remove after animation
+    setTimeout(() => {
+      if (particle.parentNode) {
+        particle.parentNode.removeChild(particle);
+        this.particles = this.particles.filter((p) => p !== particle);
+      }
+    }, duration * 1000 + 100);
+  }
+
+  // Method to change theme dynamically
+  changeTheme(newTheme) {
+    // Clear existing particles
+    this.particles.forEach((particle) => {
+      if (particle.parentNode) {
+        particle.parentNode.removeChild(particle);
+      }
+    });
+    this.particles = [];
+
+    // Update theme
+    this.theme = newTheme;
+    document.body.setAttribute("data-festival", newTheme);
+
+    // Reinitialize
+    this.init();
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize loading screen first
@@ -442,6 +666,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const letterPopup = new LetterPopup();
     const servicesCarousel = new ServicesCarousel();
     const scrollAnimations = new ScrollAnimations();
+    const festivalTheme = new FestivalTheme();
 
     // Image lazy loading
     const images = document.querySelectorAll('img[loading="lazy"]');
@@ -450,5 +675,8 @@ document.addEventListener("DOMContentLoaded", () => {
         img.classList.add("loaded");
       });
     });
+
+    // Make festivalTheme globally accessible for easy theme switching
+    window.festivalTheme = festivalTheme;
   }, 100);
 });
